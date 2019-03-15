@@ -1,0 +1,177 @@
+{
+	"plugin_id": "smartsimu",
+	"name_fr": "smartPresence",
+	"icon": "smartpresence.png",
+	"version": "0.3",
+	"creation_date": "2019-02-01",
+	"modification_date": "2019-03-12",
+	"author": "Influman",
+	"description_fr": "Simulation de présence intelligente",
+	"description_en": "",
+	"description_es": "",
+	"description_it": "",
+	"description_de": "",
+	"forum_link": "https://forum.eedomus.com/viewtopic.php?f=50&t=8125",
+	"parameters": 
+	[
+		{
+			"parameter": "ZONE", 
+			"description": "Résidence",
+			"xtype": "textfield",
+			"default_value": "1",
+			"field": "width:50, allowBlank:true"
+        },
+		{
+			"parameter": "line0",
+			"description": "------ Lumières ",
+			"xtype": "displayfield",
+			"field": "style: 'padding: 3px;', value: '----------------------------------'"
+		},
+		{
+			"parameter": "LIGHT1", 
+			"description": "Lampe n°1",
+			"xtype": "combo",
+			"field": "store : getCombo('/json/list_all.php?actuator_only=1'), displayField: 'label', valueField: 'id', triggerAction: 'all', selectOnFocus: true, editable: false, shadow:true, mode: 'local', width: 250, listWidth: 300, allowBlank: false"
+        },
+		{
+			"parameter": "LIGHT2", 
+			"description": "Lampe n°2",
+			"xtype": "combo",
+			"field": "store : getCombo('/json/list_all.php?actuator_only=1'), displayField: 'label', valueField: 'id', triggerAction: 'all', selectOnFocus: true, editable: false, shadow:true, mode: 'local', width: 250, listWidth: 300, allowBlank: true"
+        },
+		{
+			"parameter": "LIGHTOFF", 
+			"description": "Valeur Lampe éteinte",
+			"xtype": "textfield",
+			"default_value": "0",
+			"field": "width:50, allowBlank:true"
+        },
+		{
+			"parameter": "LIGHTON", 
+			"description": "Valeur Lampe allumée",
+			"xtype": "textfield",
+			"default_value": "100",
+			"field": "width:50, allowBlank:true"
+        },
+		{
+			"parameter": "line1",
+			"description": "------ Volets (facultatif)",
+			"xtype": "displayfield",
+			"field": "style: 'padding: 3px;', value: '----------------------------------'"
+		},
+		{
+			"parameter": "SHUTTER1", 
+			"description": "Volet roulant n°1",
+			"xtype": "combo",
+			"field": "store : getCombo('/json/list_all.php?actuator_only=1'), displayField: 'label', valueField: 'id', triggerAction: 'all', selectOnFocus: true, editable: false, shadow:true, mode: 'local', width: 250, listWidth: 300, allowBlank: true"
+        },
+		{
+			"parameter": "SHUTTER2", 
+			"description": "Volet roulant n°2",
+			"xtype": "combo",
+			"field": "store : getCombo('/json/list_all.php?actuator_only=1'), displayField: 'label', valueField: 'id', triggerAction: 'all', selectOnFocus: true, editable: false, shadow:true, mode: 'local', width: 250, listWidth: 300, allowBlank: true"
+        },
+		{
+			"parameter": "SHUTTEROFF", 
+			"description": "Valeur Volet fermé",
+			"xtype": "textfield",
+			"default_value": "0",
+			"field": "width:50, allowBlank:true"
+        },
+		{
+			"parameter": "SHUTTERON", 
+			"description": "Valeur Volet ouvert",
+			"xtype": "textfield",
+			"default_value": "100",
+			"field": "width:50, allowBlank:true"
+        },
+		{
+			"parameter": "line2",
+			"description": "----- Présence (facultatif)",
+			"xtype": "displayfield",
+			"field": "style: 'padding: 3px;', value: '----------------------------------'"
+		},
+		{
+			"parameter": "SCORE", 
+			"description": "Plugin Score présence ",
+			"xtype": "combo",
+			"field": "store : getCombo('/json/list_all.php'), displayField: 'label', valueField: 'id', triggerAction: 'all', selectOnFocus: true, editable: false, shadow:true, mode: 'local', width: 250, listWidth: 300, allowBlank: true"
+        },
+		{
+			"parameter": "line3",
+			"description": "----- Vos paramètres API eedomus",
+			"xtype": "displayfield",
+			"field": "style: 'padding: 3px;', value: '----------------------------------'"
+		},	
+		{
+                "parameter": "APIU", 
+                "description": "Code API User : ",
+                "xtype": "textfield",
+				"default_value": "",
+				"field": "width:150, allowBlank:false"
+			},
+			{
+                "parameter": "APIS", 
+                "description": "Code API Secret : ",
+                "xtype": "textfield",
+				"default_value": "",
+				"field": "width:150, allowBlank:false"
+			}
+	 ],
+	"scripts":
+	[
+		{
+			"name": "smartpresence.php"
+		}
+	],
+	"devices":
+    [
+		{
+			"device_id": "mode",
+			"module_id": "41",
+			"type": "http",
+			"name_fr": "smartPresence Mode #plugin.parameters.ZONE",
+			"icon": "smartpresence_mode.png",
+			"utilisation_id": "43",
+			"parameters":
+			{
+				"VAR1": "plugin.parameters.LIGHTOFF,plugin.parameters.LIGHTON,plugin.parameters.LIGHT1,plugin.parameters.LIGHT2",
+				"VAR2": "plugin.parameters.SHUTTEROFF,plugin.parameters.SHUTTERON,plugin.parameters.SHUTTER1,plugin.parameters.SHUTTER2",
+				"VAR3": "plugin.parameters.SCORE",
+				"value_type": "list",
+				"ignore_errors": 1,
+				"RAW_URL": "",
+				"RAW_XPATH": "",
+				"POLLING": "5"
+			},
+			"values":
+			[
+				{ "value": "0", "description": "Inactif", "icon": "smartpresence_inactif.png", "http_url": "http://localhost/script/?exec=smartpresence.php", "http_type": "GET",  "http_params": "&action=setmode&value=stop&lights=[VAR1]&shutters=[VAR2]&score=[VAR3]&zone=plugin.parameters.ZONE" },
+				{ "value": "1", "description": "Auto", "icon": "smartpresence_auto.png", "http_url": "http://localhost/script/?exec=smartpresence.php", "http_type": "GET",  "http_params": "&action=setmode&value=auto&lights=[VAR1]&shutters=[VAR2]&score=[VAR3]&zone=plugin.parameters.ZONE" },
+				{ "value": "2", "description": "Actif", "icon": "smartpresence_actif.png", "http_url": "http://localhost/script/?exec=smartpresence.php", "http_type": "GET",  "http_params": "&action=setmode&value=onall&lights=[VAR1]&shutters=[VAR2]&score=[VAR3]&zone=plugin.parameters.ZONE" },
+				{ "value": "3", "description": "Actif Lumières", "icon": "smartpresence_actiflight.png", "http_url": "http://localhost/script/?exec=smartpresence.php", "http_type": "GET",  "http_params": "&action=setmode&value=onlight&lights=[VAR1]&shutters=[VAR2]&score=[VAR3]&zone=plugin.parameters.ZONE" },
+				{ "value": "4", "description": "Actif Volets", "icon": "smartpresence_actifshutter.png", "http_url": "http://localhost/script/?exec=smartpresence.php", "http_type": "GET",  "http_params": "&action=setmode&value=onshutter&lights=[VAR1]&shutters=[VAR2]&score=[VAR3]&zone=plugin.parameters.ZONE" }
+			]
+		},
+		{
+			"device_id": "statut",
+			"parent_id": "mode",
+			"module_id": "51",
+			"type": "http",
+			"name_fr": "smartPresence Statut #plugin.parameters.ZONE",
+			"icon": "smartpresence_statut.png",
+			"utilisation_id": "35",
+			"parameters":
+			{
+				"VAR1": "plugin.parameters.LIGHTOFF,plugin.parameters.LIGHTON,plugin.parameters.LIGHT1,plugin.parameters.LIGHT2",
+				"VAR2": "plugin.parameters.SHUTTEROFF,plugin.parameters.SHUTTERON,plugin.parameters.SHUTTER1,plugin.parameters.SHUTTER2",
+				"VAR3": "plugin.parameters.SCORE",
+				"value_type": "string",
+				"ignore_errors": 3,
+				"RAW_URL": "http://localhost/script/?exec=smartpresence.php&action=getstatus&lights=[VAR1]&shutters=[VAR2]&score=[VAR3]&apiu=plugin.parameters.APIU&apis=plugin.parameters.APIS&zone=plugin.parameters.ZONE",
+				"RAW_XPATH": "/SMARTPRESENCE/STATUS",
+				"POLLING": "5"
+			}
+		}
+	]
+}
